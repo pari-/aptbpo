@@ -52,4 +52,23 @@ Puppet::Type.type(:package).provide :aptbpo, :parent => :apt, :source => :apt do
     aptget(*cmd)
   end
 
+  # What's the latest package version available?
+  def latest
+    cmd = []
+    if resource[:install_options]
+      resource[:install_options].each_pair do |k,v|
+        cmd << [k,v]
+      end
+    end
+    output = aptcache :policy,  @resource[:name], *cmd
+
+    if output =~ /Candidate:\s+(\S+)\s/
+      return $1
+    else
+      self.err "Could not find latest version"
+      return nil
+    end
+  end
+
+
 end
