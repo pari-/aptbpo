@@ -15,6 +15,7 @@ Puppet::Type.type(:package).provide :aptbpo, :parent => :apt, :source => :apt do
   desc "Enhanced Package management via `apt-get`."
 
   has_feature :install_options
+  has_feature :versionable
   def install
     self.run_preseed if @resource[:responsefile]
     should = @resource[:ensure]
